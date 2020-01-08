@@ -6,13 +6,16 @@ date_default_timezone_set('Europe/London');
 ini_set('max_input_vars', 9000);
 include('../class/classDb.php');
 include('../class/classOrders.php');
+include('../class/classXML.php');
 
 
     $storeNo = $_POST['storeNo'];
     $orderNo = $_POST['orderNo'];
 	
 	
-	$db = new dbConnection();
+	$xml = new xmlFile($_SERVER["DOCUMENT_ROOT"].'/dbXML.xml');
+    $db = new dbConnection($xml->getConnectionArray());
+	//$db = new dbConnection();
     $orders = new orders();
     $orders ->openConnection($db->getDbConnection($storeNo));
     $shopName = $db->getShopName();
@@ -93,13 +96,12 @@ $fileName = str_replace(" ","_",$fileName).'.xlsx';
 $objWriter->save('../files/'.$fileName);
 
 
-$callEndTime = microtime(true);
-$callTime = $callEndTime - $callStartTime;
+$directory = explode("\\",dirname(dirname(__FILE__)));
 
 $pathToFile = dirname(pathinfo(__FILE__)['dirname']).'\\files\\'.$fileName;
 
 if (file_exists($pathToFile)){
-    echo "Click to download <a href = '/nobbyOrder/files/".$fileName."'>".$fileName."</a>";    
+    echo "Click to download <a href = '/".$directory[count($directory)-1]."/files/".$fileName."'>".$fileName."</a>";    
 }else{
     echo "Ups.. something went wrong and file wasn't created. Contact Robert.";    
 }

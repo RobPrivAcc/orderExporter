@@ -16,15 +16,21 @@
   </head>
   <body>
     <?php
-        include("class/classOrders.php");
-        include("class/classDB.php");
+        //include("class/classOrders.php");
+        //include("class/classDB.php");
+        include("class/classDb.php");
+        include("class/classXML.php");
     ?>
     <div class="container-fluid" id="mainContainer">
         <div class="row">
           <div class='col-xs-10 col-10'>
             <div class="radio">
             <?php
-              $db = new dbConnection();
+            
+              $xml = new xmlFile($_SERVER["DOCUMENT_ROOT"].'/dbXML.xml');
+              $db = new dbConnection($xml->getConnectionArray());
+          
+          #    $db = new dbConnection();
               
               //print_r($db -> getShopsName());
               $shopsArray = $db -> getShopsName();

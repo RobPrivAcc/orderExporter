@@ -1,10 +1,13 @@
 <?php
     include('../class/classDb.php');
     include('../class/classOrders.php');
+    include('../class/classXML.php');
     
     $storeNo = $_POST['storeNo'];
     
-    $db = new dbConnection();
+    $xml = new xmlFile($_SERVER["DOCUMENT_ROOT"].'/dbXML.xml');
+    $db = new dbConnection($xml->getConnectionArray());
+
     $orders = new orders();
     $orders ->openConnection($db->getDbConnection($storeNo));
     
